@@ -3,14 +3,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 
-# -----------------------------
 # PAGE CONFIG
-# -----------------------------
 st.set_page_config(page_title="Bike Sharing Dashboard", layout="wide")
 
-# -----------------------------
 # LOAD DATA
-# -----------------------------
 @st.cache_data
 def load_data():
     df = pd.read_csv("dashboard/main_data.csv")
@@ -24,9 +20,7 @@ main_df["year"] = main_df["dteday"].dt.year
 main_df["month"] = main_df["dteday"].dt.month
 main_df["day"] = main_df["dteday"].dt.day
 
-# -----------------------------
 # SIDEBAR FILTER
-# -----------------------------
 with st.sidebar:
 
     st.image("https://github.com/dicodingacademy/assets/raw/main/logo.png")
@@ -56,9 +50,7 @@ with st.sidebar:
         value=(1,31)
     )
 
-# -----------------------------
 # FILTER DATA
-# -----------------------------
 filtered_df = main_df[
     (main_df["year"] >= year_range[0]) &
     (main_df["year"] <= year_range[1]) &
@@ -68,14 +60,10 @@ filtered_df = main_df[
     (main_df["day"] <= day_range[1])
 ]
 
-# -----------------------------
 # HEADER
-# -----------------------------
 st.header("Bike Sharing Dashboard 🚲")
 
-# -----------------------------
 # METRICS
-# -----------------------------
 col1, col2, col3 = st.columns(3)
 
 with col1:
@@ -92,9 +80,7 @@ with col3:
 
 st.divider()
 
-# ====================================================
 # BAR CHART CUACA
-# ====================================================
 st.subheader("Rata-rata Penyewaan Sepeda Berdasarkan Kondisi Cuaca")
 
 weather_rentals = filtered_df.groupby("weathersit")["cnt"].mean().reset_index()
@@ -117,10 +103,10 @@ ax.set_xlabel('Rata-rata Jumlah Penyewaan')
 ax.grid(axis='x', linestyle='--', alpha=0.6)
 for p in ax.patches:
     ax.annotate(
-        f'{p.get_width():.0f}',                # nilai bar
-        (p.get_width(),                       # posisi x di ujung bar
-         p.get_y() + p.get_height()/2),       # posisi y tengah bar
-        xytext=(5,0),                         # jarak teks dari bar
+        f'{p.get_width():.0f}',            
+        (p.get_width(),                     
+         p.get_y() + p.get_height()/2),      
+        xytext=(5,0),                      
         textcoords='offset points',
         ha='left',
         va='center',
@@ -129,9 +115,7 @@ for p in ax.patches:
 
 st.pyplot(fig)
 
-# ====================================================
 # LINE CHART JAM
-# ====================================================
 st.subheader("Tren Rata-rata Penyewaan Sepeda Berdasarkan Jam")
 
 if "hr" in filtered_df.columns:
@@ -173,9 +157,7 @@ if "hr" in filtered_df.columns:
 else:
     st.info("Dataset tidak memiliki kolom 'hr'")
 
-# ====================================================
 # TEMPERATURE CLUSTER
-# ====================================================
 st.subheader("Rata-rata Penyewaan Berdasarkan Kategori Temperatur")
 
 bins = [0, 0.3, 0.6, 0.8, 1.0]
@@ -214,9 +196,9 @@ ax.grid(axis='y', linestyle='--', alpha=0.7)
 
 for p in ax.patches:
     ax.annotate(
-        f'{p.get_height():.0f}',             # nilai bar
-        (p.get_x() + p.get_width() / 2,      # posisi x tengah bar
-         p.get_height()),                    # posisi y atas bar
+        f'{p.get_height():.0f}',           
+        (p.get_x() + p.get_width() / 2,     
+         p.get_height()),                  
         ha='center',
         va='bottom',
         fontsize=11
