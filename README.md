@@ -14,8 +14,11 @@ Proyek ini merupakan hasil analisis data pada dataset "Bike Sharing" untuk menge
 ```text
 submissions
 ├── dashboard/
-│   ├── dashboard.py            # File utama Streamlit
+│   ├── dashboard.py        # File utama Streamlit
 │   └── main_data.csv       # Dataset yang telah dibersihkan
+├── data/                   # Folder Dataset
+│   ├── day.csv             # Dataset hari
+│   └── hour.csv            # Dataset jam
 ├── notebook.ipynb          # Analisis Data (Wrangling, EDA, Visualisasi)
 ├── requirements.txt        # Daftar library (dependencies)
 └── README.md

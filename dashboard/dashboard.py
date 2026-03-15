@@ -24,37 +24,40 @@ main_df = load_data()
 # --- SIDEBAR FILTER ---
 with st.sidebar:
     st.image("https://github.com/dicodingacademy/assets/raw/main/logo.png")
-    st.title("Bike Sharing Analysis")
 
-    # Mendapatkan rentang tanggal dari dataset
-    min_date = main_df["dteday"].min()
-    max_date = main_df["dteday"].max()
+    # Setup tanggal dataset
+    main_df["dteday"] = pd.to_datetime(main_df["dteday"])
 
-    # FILTER TANGGAL (Detailed Range)
-    try:
-        # User bisa memilih rentang tanggal secara bebas (misal: Nov 2011 - Mar 2012)
-        date_range = st.date_input(
-            label='Pilih Rentang Waktu (Tahun-Bulan-Hari)',
-            min_value=min_date,
-            max_value=max_date,
-            value=[min_date, max_date]
-        )
-        
-        # Validasi jika user baru memilih satu tanggal
-        if len(date_range) == 2:
-            start_date, end_date = date_range
-        else:
-            st.info("Pilih tanggal mulai dan tanggal selesai pada kalender.")
-            st.stop()
-            
-    except ValueError:
-        st.error("Format tanggal tidak valid.")
+    min_date = main_df["dteday"].min().date()
+    max_date = main_df["dteday"].max().date()
+
+    st.subheader("Filter Tanggal")
+
+    # Tanggal mulai
+    start_date = st.date_input(
+        "Tanggal Mulai",
+        value=min_date,
+        min_value=min_date,
+        max_value=max_date
+    )
+
+    # Tanggal akhir
+    end_date = st.date_input(
+        "Tanggal Akhir",
+        value=max_date,
+        min_value=min_date,
+        max_value=max_date
+    )
+
+    # Validasi
+    if start_date > end_date:
+        st.error("Tanggal mulai tidak boleh lebih besar dari tanggal akhir.")
         st.stop()
 
-# --- FILTERING DATA ---
+# --- FILTER DATASET ---
 filtered_df = main_df[
-    (main_df["dteday"] >= pd.to_datetime(start_date)) & 
-    (main_df["dteday"] <= pd.to_datetime(end_date))
+    (main_df["dteday"].dt.date >= start_date) &
+    (main_df["dteday"].dt.date <= end_date)
 ]
 
 # --- MAIN PAGE HEADER ---
