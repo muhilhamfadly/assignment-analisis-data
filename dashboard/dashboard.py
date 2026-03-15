@@ -10,7 +10,7 @@ st.set_page_config(page_title="Bike Sharing Dashboard", layout="wide")
 # --- LOAD DATA ---
 @st.cache_data
 def load_data():
-    # Menggunakan path relatif yang lebih aman untuk deployment
+    # Menggunakan path 
     current_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(current_dir, "main_data.csv")
     
@@ -102,7 +102,6 @@ if not filtered_df.empty:
 else:
     st.warning("Tidak ada data untuk rentang waktu ini.")
 
-# --- Ganti bagian expander Cuaca dengan ini ---
 with st.expander("Selengkapnya"):
     if not weather_rentals.empty:
         # Mengambil baris pertama (tertinggi karena sudah di-sort) dan baris terakhir
@@ -153,7 +152,6 @@ if not filtered_df.empty:
     bins = [0, 0.3, 0.6, 0.8, 1.0]
     labels = ['Cold', 'Moderate', 'Warm', 'Hot']
 
-    # Gunakan .copy() untuk menghindari SettingWithCopyWarning
     temp_df = filtered_df.copy()
     temp_df["temp_cluster"] = pd.cut(temp_df["temp"], bins=bins, labels=labels, include_lowest=True)
 
@@ -171,10 +169,8 @@ if not filtered_df.empty:
     ax.set_ylabel('Rata-rata Penyewaan')
     st.pyplot(fig)
 
-# --- Ganti bagian expander Temperature dengan ini ---
 with st.expander("Selengkapnya"):
     if not temp_analysis.empty:
-        # Urutkan dulu agar kita tahu mana yang tertinggi dan terendah
         temp_analysis_sorted = temp_analysis.sort_values(by='cnt', ascending=False)
         top_temp = temp_analysis_sorted.iloc[0]
         bottom_temp = temp_analysis_sorted.iloc[-1]
